@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <iosfwd>
 #include <iostream>
+#include <random>
 
 class BenchmarkRunner {
  public:
@@ -31,6 +32,14 @@ class BenchmarkRunner {
     using namespace ::std::chrono;
     time_point<system_clock> now = system_clock::now();
     return static_cast<uint64_t>(duration_cast<microseconds>(now.time_since_epoch()).count());
+  }
+
+  template <typename T>
+  static T Random(T max) {
+    auto seed = static_cast<unsigned int>(time(nullptr));
+    static thread_local std::mt19937 generator(seed);
+    std::uniform_int_distribution<T> distribution(0, max);
+    return distribution(generator);
   }
 
   std::string runner_type_;
