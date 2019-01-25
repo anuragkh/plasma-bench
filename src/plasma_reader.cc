@@ -27,10 +27,17 @@ void PlasmaReader::Run() {
     std::vector<plasma::ObjectBuffer> data;
     *(reinterpret_cast<size_t*>(id.mutable_data())) = Key(i);
     auto t00 = NowUs();
-    ARROW_CHECK_OK(client_.Get({id}, -1, &data));
+    ARROW_CHECK_OK(client_.Get({id}, 10000, &data));
     auto t01 = NowUs();
     latency_sum += (t01 - t00);
-    ARROW_CHECK(data.size() == 1 && data[0].data->size() == static_cast<int64_t>(object_size_));
+    ARROW_CHECK(data.size() == 1);
+    if (!data[0].data) {
+      std::string msg = "Object ID " + id.hex() + " (" +
+          std::to_string(*(reinterpret_cast<size_t*>(id.mutable_data()))) + ") not found";
+      std::cerr << msg;
+      throw std::runtime_error(msg);
+    }
+    ARROW_CHECK(data[0].data->size() == static_cast<int64_t>(object_size_));
   }
   auto t1 = NowUs();
   avg_latency_ = (double) latency_sum / num_objects_;
