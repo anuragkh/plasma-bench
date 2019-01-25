@@ -27,6 +27,7 @@ void PlasmaWriter::Run() {
     ARROW_CHECK_OK(client_.Create(id, object_size_, nullptr, 0, &buf));
     memcpy(buf->mutable_data(), buf_, object_size_);
     ARROW_CHECK_OK(client_.Seal(id));
+    ARROW_CHECK_OK(client_.Release(id));
     auto t01 = NowUs();
     latency_sum += (t01 - t00);
   }
