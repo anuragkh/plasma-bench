@@ -34,7 +34,6 @@ void PlasmaReader::Run() {
     if (!data[0].data) {
       std::string msg = "Object ID " + id.hex() + " (" +
           std::to_string(*(reinterpret_cast<size_t*>(id.mutable_data()))) + ") not found";
-      std::cerr << msg;
       throw std::runtime_error(msg);
     }
     ARROW_CHECK(data[0].data->size() == static_cast<int64_t>(object_size_));
