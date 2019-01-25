@@ -12,9 +12,10 @@ PlasmaReader::PlasmaReader(const std::string &sock, size_t num_objects, size_t o
 
 void PlasmaReader::Run() {
   uint64_t latency_sum = 0;
+  plasma::ObjectID id;
+  memset(id.mutable_data(), 0, static_cast<size_t>(plasma::ObjectID::size()));
   auto t0 = NowUs();
   for (size_t i = 0; i < num_objects_; ++i) {
-    plasma::ObjectID id;
     std::vector<plasma::ObjectBuffer> data;
     *(reinterpret_cast<size_t*>(id.mutable_data())) = i;
     auto t00 = NowUs();

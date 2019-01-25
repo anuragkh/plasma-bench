@@ -17,9 +17,10 @@ PlasmaWriter::PlasmaWriter(const std::string &sock, size_t num_objects,
 
 void PlasmaWriter::Run() {
   uint64_t latency_sum = 0;
+  plasma::ObjectID id;
+  memset(id.mutable_data(), 0, static_cast<size_t>(plasma::ObjectID::size()));
   auto t0 = NowUs();
   for (size_t i = 0; i < num_objects_; ++i) {
-    plasma::ObjectID id;
     *(reinterpret_cast<size_t*>(id.mutable_data())) = i;
     std::shared_ptr<arrow::Buffer> buf;
     auto t00 = NowUs();
