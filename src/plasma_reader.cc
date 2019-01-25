@@ -21,7 +21,7 @@ void PlasmaReader::Run() {
     ARROW_CHECK_OK(client_.Get({id}, -1, &data));
     auto t01 = NowUs();
     latency_sum += (t01 - t00);
-    ARROW_CHECK(data.size() == 1 && data[0].data->size() == object_size_);
+    ARROW_CHECK(data.size() == 1 && data[0].data->size() == static_cast<int64_t>(object_size_));
   }
   auto t1 = NowUs();
   avg_latency_ = (double) latency_sum / num_objects_;

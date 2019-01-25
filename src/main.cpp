@@ -11,13 +11,13 @@ int main(int argc, char *argv[]) {
   std::size_t num_objects = std::stoull(argv[2]);
   std::size_t object_size = std::stoull(argv[3]);
 
-  std::cerr << "Running write benchmark...";
+  std::cerr << "Running write benchmark..." << std::endl;
   PlasmaWriter writer(plasma_sock, num_objects, object_size);
   writer.Run();
 
   writer.LogResults(std::cerr);
 
-  std::cerr << "Running read benchmark...";
+  std::cerr << "Running read benchmark..." << std::endl;
   PlasmaReader reader(plasma_sock, num_objects, object_size);
   reader.Run();
 

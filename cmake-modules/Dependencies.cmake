@@ -91,6 +91,8 @@ if(EXISTS "/etc/redhat-release" AND CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(LIB_SUFFIX 64)
 endif()
 
+find_package(Threads REQUIRED)
+
 include(GlogExternalProject)
 message(STATUS "Glog home: ${GLOG_HOME}")
 message(STATUS "Glog include dir: ${GLOG_INCLUDE_DIR}")
