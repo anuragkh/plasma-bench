@@ -23,5 +23,7 @@ int main(int argc, char *argv[]) {
 
   reader.LogResults(std::cerr);
 
+  std::cerr << writer.AvgLatency() << " " << writer.Throughput() << " " << reader.AvgLatency() << " " << reader.Throughput() << std::endl;
+
   return 0;
 }
