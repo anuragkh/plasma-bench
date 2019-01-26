@@ -38,7 +38,7 @@ class BenchmarkRunner {
   static T Random(T max) {
     auto seed = static_cast<unsigned int>(time(nullptr));
     static thread_local std::mt19937 generator(seed);
-    std::uniform_int_distribution<T> distribution(0, max);
+    std::uniform_int_distribution<T> distribution(0, max - 1);
     return distribution(generator);
   }
 
