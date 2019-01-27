@@ -22,17 +22,11 @@ int main(int argc, char *argv[]) {
   std::size_t num_objects = std::stoull(argv[3]);
   std::size_t object_size = std::stoull(argv[4]);
 
-  std::cerr << "Running write benchmark..." << std::endl;
   ThreadedRunner<PlasmaWriter> writer(plasma_sock, num_threads, num_objects, object_size);
   writer.Run();
 
-  writer.LogResults(std::cerr);
-
-  std::cerr << "Running read benchmark..." << std::endl;
   ThreadedRunner<PlasmaReader> reader(plasma_sock, num_threads, num_objects, object_size);
   reader.Run();
-
-  reader.LogResults(std::cerr);
 
   std::cerr << writer.AvgLatency() << " " << writer.Throughput() << " "
             << reader.AvgLatency() << " " << reader.Throughput() << std::endl;
