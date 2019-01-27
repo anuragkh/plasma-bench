@@ -25,7 +25,9 @@ void PlasmaReader::Run() {
   for (size_t i = start_idx_; i < start_idx_ + num_objects_; ++i) {
     std::cerr << "i = " << i << std::endl;
     std::vector<plasma::ObjectBuffer> data;
-    *(reinterpret_cast<size_t*>(id.mutable_data())) = Key(i);
+    auto k = Key(i);
+    std::cerr << i << "th key is " << k << std::endl;
+    *(reinterpret_cast<size_t*>(id.mutable_data())) = k;
     auto t00 = NowUs();
     ARROW_CHECK_OK(client_.Get({id}, 10000, &data));
     auto t01 = NowUs();
