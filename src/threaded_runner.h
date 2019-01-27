@@ -19,7 +19,6 @@ class ThreadedRunner : public BenchmarkRunner {
   virtual ~ThreadedRunner() = default;
 
   size_t Run() override {
-    std::cerr << "Threaded benchmark with " << num_threads_ << " threads..." << std::endl;
     std::vector<std::thread> threads;
     std::vector<std::exception_ptr> eptrs(num_threads_, nullptr);
     std::vector<size_t> num_ops(num_threads_, 0);
