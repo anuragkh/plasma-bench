@@ -44,6 +44,6 @@ void PlasmaReader::Run() {
 size_t PlasmaReader::Key(size_t i) const {
   if (read_order_ == SEQUENTIAL)
     return i;
-  return Random<size_t>(num_objects_);
+  return Random<size_t>(start_idx_, start_idx_ + num_objects_);
 }
 

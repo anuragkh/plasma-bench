@@ -40,10 +40,10 @@ class BenchmarkRunner {
   }
 
   template<typename T>
-  static T Random(T max) {
+  static T Random(T min, T max) {
     auto seed = static_cast<unsigned int>(time(nullptr));
     static thread_local std::mt19937 generator(seed);
-    std::uniform_int_distribution<T> distribution(0, max - 1);
+    std::uniform_int_distribution<T> distribution(min, max - 1);
     return distribution(generator);
   }
 
