@@ -16,7 +16,6 @@ void PlasmaWriter::Run() {
   uint64_t latency_sum = 0;
   plasma::ObjectID id;
   memset(id.mutable_data(), 0, static_cast<size_t>(plasma::ObjectID::size()));
-  std::cerr << "Starting write benchmark in range " << start_idx_ << " to " << start_idx_ + num_objects_;
   auto t0 = NowUs();
   for (size_t i = start_idx_; i < start_idx_ + num_objects_; ++i) {
     *(reinterpret_cast<size_t*>(id.mutable_data())) = i;

@@ -45,7 +45,6 @@ class BenchmarkRunner {
     static thread_local std::mt19937 generator(seed);
     std::uniform_int_distribution<T> distribution(min, max - 1);
     T ret = distribution(generator);
-    std::cerr << "Random in range " << min << " to " << max << " is " << ret << std::endl;
     return ret;
   }
 
