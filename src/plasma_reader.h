@@ -20,6 +20,8 @@ class PlasmaReader : public BenchmarkRunner {
                size_t object_size,
                ReadOrder read_order = ReadOrder::RANDOM);
 
+  virtual ~PlasmaReader() = default;
+
   void Run() override;
 
  private:

@@ -12,6 +12,8 @@ class PlasmaWriter : public BenchmarkRunner {
  public:
   PlasmaWriter(const std::string &sock, size_t num_objects, size_t object_size);
 
+  virtual ~PlasmaWriter() = default;
+
   void Run() override;
 
  private:

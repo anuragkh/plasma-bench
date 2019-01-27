@@ -11,11 +11,13 @@ class ThreadedRunner : public BenchmarkRunner {
       "Threaded runner template argument must be a BenchmarkRunner");
   template<typename... Args>
   explicit ThreadedRunner(size_t num_threads, Args... args)
-    : num_threads_(num_threads) {
+    : BenchmarkRunner("Threaded Runner"), num_threads_(num_threads) {
       for (size_t i = 0; i < num_threads_; ++i) {
         runners_.push_back(std::make_shared<Runner>(std::forward<Args>(args)...));
       }
   }
+
+  virtual ~ThreadedRunner() = default;
 
   void Run() override {
     std::vector<std::thread> threads_;
