@@ -2,11 +2,8 @@
 
 #include <arrow/util/logging.h>
 
-PlasmaWriter::PlasmaWriter(const std::string &sock, size_t num_objects,
-                           size_t object_size)
-    : BenchmarkRunner("Plasma Writer"),
-      num_objects_(num_objects),
-      object_size_(object_size),
+PlasmaWriter::PlasmaWriter(const std::string &sock, size_t num_objects, size_t object_size, size_t start_idx)
+    : BenchmarkRunner("Plasma Writer", num_objects, object_size, start_idx),
       sock_(sock) {
   buf_ = new uint8_t[object_size];
   for (size_t i = 0; i < object_size; ++i) {
@@ -20,7 +17,7 @@ void PlasmaWriter::Run() {
   plasma::ObjectID id;
   memset(id.mutable_data(), 0, static_cast<size_t>(plasma::ObjectID::size()));
   auto t0 = NowUs();
-  for (size_t i = 0; i < num_objects_; ++i) {
+  for (size_t i = start_idx_; i < start_idx_ + num_objects_; ++i) {
     *(reinterpret_cast<size_t*>(id.mutable_data())) = i;
     std::shared_ptr<arrow::Buffer> buf;
     auto t00 = NowUs();

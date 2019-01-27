@@ -9,11 +9,10 @@ class ThreadedRunner : public BenchmarkRunner {
  public:
   static_assert(std::is_base_of<BenchmarkRunner, Runner>::value,
       "Threaded runner template argument must be a BenchmarkRunner");
-  template<typename... Args>
-  explicit ThreadedRunner(size_t num_threads, Args... args)
+  explicit ThreadedRunner(const std::string& plasma_sock,  size_t num_threads, size_t num_objects, size_t object_size)
     : BenchmarkRunner("Threaded Runner"), num_threads_(num_threads) {
       for (size_t i = 0; i < num_threads_; ++i) {
-        runners_.push_back(std::make_shared<Runner>(std::forward<Args>(args)...));
+        runners_.push_back(std::make_shared<Runner>(plasma_sock, num_objects, object_size, i * num_objects));
       }
   }
 

@@ -9,11 +9,9 @@ std::string ToString(ReadOrder order) {
 PlasmaReader::PlasmaReader(const std::string &sock,
                            size_t num_objects,
                            size_t object_size,
+                           size_t start_idx,
                            ReadOrder read_order)
-  : BenchmarkRunner("Plasma Reader " + ToString(read_order)),
-    num_objects_(num_objects),
-    object_size_(object_size),
-    read_order_(read_order),
+  : BenchmarkRunner("Plasma Reader " + ToString(read_order), num_objects, object_size, start_idx),
     sock_(sock) {
   ARROW_CHECK_OK(client_.Connect(sock_));
 }
@@ -23,7 +21,7 @@ void PlasmaReader::Run() {
   plasma::ObjectID id;
   memset(id.mutable_data(), 0, static_cast<size_t>(plasma::ObjectID::size()));
   auto t0 = NowUs();
-  for (size_t i = 0; i < num_objects_; ++i) {
+  for (size_t i = start_idx_; i < start_idx_ + num_objects_; ++i) {
     std::vector<plasma::ObjectBuffer> data;
     *(reinterpret_cast<size_t*>(id.mutable_data())) = Key(i);
     auto t00 = NowUs();

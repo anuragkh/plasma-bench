@@ -18,6 +18,7 @@ class PlasmaReader : public BenchmarkRunner {
   PlasmaReader(const std::string &sock,
                size_t num_objects,
                size_t object_size,
+               size_t start_idx,
                ReadOrder read_order = ReadOrder::RANDOM);
 
   virtual ~PlasmaReader() = default;
@@ -27,8 +28,6 @@ class PlasmaReader : public BenchmarkRunner {
  private:
   size_t Key(size_t i) const;
 
-  size_t num_objects_;
-  size_t object_size_;
   ReadOrder read_order_;
   std::string sock_;
 
