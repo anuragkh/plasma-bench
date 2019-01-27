@@ -23,7 +23,6 @@ void PlasmaReader::Run() {
   std::cerr << "Starting read benchmark in range " << start_idx_ << " to " << start_idx_ + num_objects_;
   auto t0 = NowUs();
   for (size_t i = start_idx_; i < start_idx_ + num_objects_; ++i) {
-    std::cerr << "i = " << i << std::endl;
     std::vector<plasma::ObjectBuffer> data;
     auto k = Key(i);
     std::cerr << i << "th key is " << k << std::endl;

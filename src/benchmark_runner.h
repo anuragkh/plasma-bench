@@ -44,7 +44,9 @@ class BenchmarkRunner {
     auto seed = static_cast<unsigned int>(time(nullptr));
     static thread_local std::mt19937 generator(seed);
     std::uniform_int_distribution<T> distribution(min, max - 1);
-    return distribution(generator);
+    T ret = distribution(generator);
+    std::cerr << "Random in range " << min << " to " << max << " is " << ret << std::endl;
+    return ret;
   }
 
   std::string runner_type_;
