@@ -1,16 +1,8 @@
 #include <iostream>
+#include <cassert>
 #include "plasma_writer.h"
 #include "plasma_reader.h"
 #include "threaded_runner.h"
-
-ReadOrder FromString(const std::string& order_str) {
-  if (order_str == "sequential") {
-    return ReadOrder::SEQUENTIAL;
-  } else if (order_str == "random") {
-    return ReadOrder::RANDOM;
-  }
-  throw std::invalid_argument("Unknown ReadOrder: " + order_str);
-}
 
 int main(int argc, char *argv[]) {
   if (argc < 5) {
@@ -23,10 +15,10 @@ int main(int argc, char *argv[]) {
   std::size_t object_size = std::stoull(argv[4]);
 
   ThreadedRunner<PlasmaWriter> writer(plasma_sock, num_threads, num_objects, object_size);
-  writer.Run();
+  assert(writer.Run() > 0);
 
   ThreadedRunner<PlasmaReader> reader(plasma_sock, num_threads, num_objects, object_size);
-  reader.Run();
+  assert(reader.Run() > 0);
 
   std::cerr << writer.AvgLatency() << " " << writer.Throughput() << " "
             << reader.AvgLatency() << " " << reader.Throughput() << std::endl;

@@ -13,6 +13,9 @@ enum ReadOrder {
   RANDOM = 1
 };
 
+std::string ToString(ReadOrder order);
+ReadOrder FromString(const std::string &order_str);
+
 class PlasmaReader : public BenchmarkRunner {
  public:
   PlasmaReader(const std::string &sock,
@@ -23,7 +26,7 @@ class PlasmaReader : public BenchmarkRunner {
 
   virtual ~PlasmaReader() = default;
 
-  void Run() override;
+  size_t Run() override;
 
  private:
   size_t Key(size_t i) const;

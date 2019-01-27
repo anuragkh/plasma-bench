@@ -6,6 +6,15 @@ std::string ToString(ReadOrder order) {
   return (order == SEQUENTIAL) ? "Sequential" : "Random";
 }
 
+ReadOrder FromString(const std::string &order_str) {
+  if (order_str == "sequential") {
+    return ReadOrder::SEQUENTIAL;
+  } else if (order_str == "random") {
+    return ReadOrder::RANDOM;
+  }
+  throw std::invalid_argument("Unknown ReadOrder: " + order_str);
+}
+
 PlasmaReader::PlasmaReader(const std::string &sock,
                            size_t num_objects,
                            size_t object_size,
@@ -17,12 +26,14 @@ PlasmaReader::PlasmaReader(const std::string &sock,
   ARROW_CHECK_OK(client_.Connect(sock_));
 }
 
-void PlasmaReader::Run() {
+size_t PlasmaReader::Run() {
   uint64_t latency_sum = 0;
+  size_t num_ops = 0;
   plasma::ObjectID id;
   memset(id.mutable_data(), 0, static_cast<size_t>(plasma::ObjectID::size()));
   auto t0 = NowUs();
-  for (size_t i = start_idx_; i < start_idx_ + num_objects_; ++i) {
+  uint64_t t1;
+  for (size_t i = start_idx_; i < start_idx_ + num_objects_ && ((t1 = NowUs()) - t0) < TIME_LIMIT_US; ++i) {
     std::vector<plasma::ObjectBuffer> data;
     auto k = Key(i);
     *(reinterpret_cast<size_t*>(id.mutable_data())) = k;
@@ -37,10 +48,11 @@ void PlasmaReader::Run() {
       throw std::runtime_error(msg);
     }
     ARROW_CHECK(data[0].data->size() == static_cast<int64_t>(object_size_));
+    ++num_ops;
   }
-  auto t1 = NowUs();
-  avg_latency_ = (double) latency_sum / num_objects_;
-  throughput_ = (double) num_objects_ / (t1 - t0);
+  avg_latency_ = (double) latency_sum / num_ops;
+  throughput_ = (double) num_ops / (t1 - t0);
+  return num_ops;
 }
 
 size_t PlasmaReader::Key(size_t i) const {
@@ -49,4 +61,3 @@ size_t PlasmaReader::Key(size_t i) const {
   }
   return Random<size_t>(start_idx_, start_idx_ + num_objects_);
 }
-

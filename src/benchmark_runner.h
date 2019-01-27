@@ -9,6 +9,8 @@
 
 class BenchmarkRunner {
  public:
+  static constexpr size_t TIME_LIMIT_US = 60000000;
+
   explicit BenchmarkRunner(const std::string &runner_type, size_t num_objects = 0, size_t obj_size = 0, size_t start_idx = 0)
       : runner_type_(runner_type),
         throughput_(-1.0),
@@ -17,7 +19,7 @@ class BenchmarkRunner {
         object_size_(obj_size),
         start_idx_(start_idx) {}
 
-  virtual void Run() = 0;
+  virtual size_t Run() = 0;
 
   double Throughput() const { return throughput_ * 1E6; }
 

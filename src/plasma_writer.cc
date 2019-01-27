@@ -12,7 +12,8 @@ PlasmaWriter::PlasmaWriter(const std::string &sock, size_t num_objects, size_t o
   ARROW_CHECK_OK(client_.Connect(sock_));
 }
 
-void PlasmaWriter::Run() {
+size_t PlasmaWriter::Run() {
+  size_t num_ops = 0;
   uint64_t latency_sum = 0;
   plasma::ObjectID id;
   memset(id.mutable_data(), 0, static_cast<size_t>(plasma::ObjectID::size()));
@@ -27,8 +28,10 @@ void PlasmaWriter::Run() {
     ARROW_CHECK_OK(client_.Release(id));
     auto t01 = NowUs();
     latency_sum += (t01 - t00);
+    ++num_ops;
   }
   auto t1 = NowUs();
-  avg_latency_ = (double) latency_sum / num_objects_;
-  throughput_ = (double) num_objects_ / (t1 - t0);
+  avg_latency_ = (double) latency_sum / num_ops;
+  throughput_ = (double) num_ops / (t1 - t0);
+  return num_ops;
 }
