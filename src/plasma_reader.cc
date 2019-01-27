@@ -20,8 +20,10 @@ void PlasmaReader::Run() {
   uint64_t latency_sum = 0;
   plasma::ObjectID id;
   memset(id.mutable_data(), 0, static_cast<size_t>(plasma::ObjectID::size()));
+  std::cerr << "Starting read benchmark in range " << start_idx_ << " to " << start_idx_ + num_objects_;
   auto t0 = NowUs();
   for (size_t i = start_idx_; i < start_idx_ + num_objects_; ++i) {
+    std::cerr << "i = " << i << std::endl;
     std::vector<plasma::ObjectBuffer> data;
     *(reinterpret_cast<size_t*>(id.mutable_data())) = Key(i);
     auto t00 = NowUs();
