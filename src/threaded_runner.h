@@ -19,6 +19,7 @@ class ThreadedRunner : public BenchmarkRunner {
   virtual ~ThreadedRunner() = default;
 
   void Run() override {
+    std::cerr << "Threaded benchmark with " << num_threads_ << "threads..." << std::endl;
     std::vector<std::thread> threads_;
     for (size_t i = 0; i < num_threads_; ++i) {
       threads_.emplace_back([i, this] {
