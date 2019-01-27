@@ -10,5 +10,5 @@ include(ExternalProject)
 include(GNUInstallDirs)
 include(Dependencies)
 
-add_executable(plasma_bench src/main.cpp src/plasma_writer.cc src/plasma_writer.h src/benchmark_runner.h src/plasma_reader.cc src/plasma_reader.h)
+add_executable(plasma_bench src/main.cpp src/plasma_writer.cc src/plasma_writer.h src/benchmark_runner.h src/plasma_reader.cc src/plasma_reader.h src/threaded_runner.h)
 target_link_libraries(plasma_bench plasma arrow glog ${CMAKE_THREAD_LIBS_INIT})
