@@ -20,17 +20,26 @@ class ThreadedRunner : public BenchmarkRunner {
 
   void Run() override {
     std::cerr << "Threaded benchmark with " << num_threads_ << " threads..." << std::endl;
-    std::vector<std::thread> threads_;
+    std::vector<std::thread> threads;
+    std::vector<std::exception_ptr> eptrs;
     for (size_t i = 0; i < num_threads_; ++i) {
-      threads_.emplace_back([i, this] {
-        runners_[i]->Run();
+      eptrs.emplace_back();
+      threads.emplace_back([i, &eptrs, this] {
+        try {
+          runners_[i]->Run();
+        } catch (std::exception&) {
+          eptrs[i] = std::current_exception();
+        }
       });
     }
 
     double latency_sum = 0;
     for (size_t i = 0; i < num_threads_; ++i) {
-      if (threads_[i].joinable())
-        threads_[i].join();
+      if (threads[i].joinable())
+        threads[i].join();
+      if (eptrs[i]) {
+        std::rethrow_exception(eptrs[i]);
+      }
       throughput_ += runners_[i]->Throughput();
       latency_sum += runners_[i]->AvgLatency();
     }
