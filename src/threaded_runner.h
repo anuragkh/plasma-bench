@@ -45,6 +45,7 @@ class ThreadedRunner : public BenchmarkRunner {
       tot_ops += num_ops[i];
     }
     avg_latency_ = latency_sum / num_threads_;
+    throughput_ /= 1E6;
     return tot_ops;
   }
 
