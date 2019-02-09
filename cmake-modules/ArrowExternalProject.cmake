@@ -15,7 +15,7 @@
 #  - PLASMA_SHARED_LIB
 
 set(arrow_URL https://github.com/anuragkh/arrow.git)
-set(arrow_TAG s3_test)
+set(arrow_TAG external_store_jiffy)
 
 set(ARROW_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/external/arrow-install)
 set(ARROW_HOME ${ARROW_INSTALL_PREFIX})
